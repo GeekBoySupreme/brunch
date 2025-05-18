@@ -12,3 +12,4 @@ I'd admit these new models have not been angel or devil-pilled yet, but if you w
 - You can expand on an idea, get related/adjacent areas of information, and also add more notes/context to the output and basically keep doing this endlessly.
 - Personal favourite feature, once you select a thought card, you can visualize the entire chain of thought traced to it's root.
 - Voice input, in case you're just that bit reluctant to write, powered by the browser's native TTS instead of adding another additional model.
+- Create Clusters to focus on a specific part of the canvas ⎯ there are also instances where `GPT 3.5 Turbo` scans the contents of the canvas and creates it's own smart clusters. However, the smart clustering behaviour is still flaky at the moment.
