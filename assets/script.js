@@ -58,19 +58,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     ];
 
-    // Load models configuration from localStorage
     function loadModelsConfig() {
         const savedModels = localStorage.getItem('aiModels');
         if (savedModels) {
             const parsedModels = JSON.parse(savedModels);
-            // Merge saved values with default model configuration to ensure all properties exist
             models = models.map(defaultModel => {
                 const savedModel = parsedModels.find(m => m.id === defaultModel.id);
                 return savedModel ? { ...defaultModel, ...savedModel } : defaultModel;
             });
         }
         
-        // Update toggle and input fields
         models.forEach(model => {
             const toggle = document.getElementById(`${model.id}-toggle`);
             const input = document.getElementById(`${model.id}-api-key`);
@@ -82,9 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Save models configuration to localStorage
     function saveModelsConfig() {
-        // Update models from form
         models.forEach(model => {
             const toggle = document.getElementById(`${model.id}-toggle`);
             const input = document.getElementById(`${model.id}-api-key`);
@@ -97,17 +92,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         localStorage.setItem('aiModels', JSON.stringify(models));
         
-        // Check if at least one model is enabled and has an API key
         const hasValidModel = models.some(model => model.enabled && model.apiKey);
         return hasValidModel;
     }
 
-    // Classify thought to determine which AI model to use
     async function classifyThought(text) {
         const openAiModel = models.find(m => m.id === 'openai');
         
         if (!openAiModel || !openAiModel.enabled || !openAiModel.apiKey) {
-            // If OpenAI is not available, use any enabled model
             return getDefaultModel();
         }
         
@@ -148,10 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             const classification = data.choices[0].message.content.toLowerCase().trim();
             
-            // Extract just the model id from the response
             const modelId = classification.split(':')[0].trim();
-            
-            // Check if the classified model is enabled and has an API key
             const classifiedModel = models.find(m => m.id === modelId && m.enabled && m.apiKey);
             
             if (classifiedModel) {
@@ -165,13 +154,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Get the default model (first enabled model with an API key)
     function getDefaultModel() {
         const enabledModel = models.find(m => m.enabled && m.apiKey);
         return enabledModel || null;
     }
 
-    // Call the appropriate AI API based on the model
     async function callAIAPI(model, prompt) {
         if (!model || !model.apiKey) {
             alert('No valid AI model available. Please configure at least one AI model with an API key.');
@@ -283,18 +270,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Check if API key exists in localStorage
     loadModelsConfig();
     const apiKeyPopup = document.getElementById('api-key-popup');
     
     if (!models.some(model => model.enabled && model.apiKey)) {
-        // Show API key popup if no key exists
         apiKeyPopup.style.display = 'flex';
     } else {
         apiKeyPopup.style.display = 'none';
     }
     
-    // Save API keys to localStorage
     document.getElementById('save-api-keys').addEventListener('click', function() {
         if (saveModelsConfig()) {
             apiKeyPopup.style.display = 'none';
@@ -305,13 +289,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
 
     document.getElementById('settings-btn').addEventListener('click', function() {
-        // Show API key popup when settings button is clicked
-        loadModelsConfig(); // Refresh the form with current values
+        loadModelsConfig();
         apiKeyPopup.style.display = 'flex';
     });
 
 
-    // Function to automatically expand the first card when it's the only one
+
     function setupAutoExpandFirstCard() {
 
         const autoExpandObserver = new MutationObserver((mutations) => {
@@ -337,23 +320,19 @@ document.addEventListener('DOMContentLoaded', function() {
         //console.log('Auto-expand functionality initialized');
     }
     
-    // Canvas elements
     const canvas = document.getElementById('infinite-canvas');
     const canvasContainer = document.getElementById('canvas-container');
     const selectionRectangle = document.getElementById('selection-rectangle');
     
-    // Input elements
     const thoughtInput = document.getElementById('thought-input');
     const voiceInputBtn = document.getElementById('voice-input-btn');
     const dictationStatus = document.getElementById('dictation-status');
     
-    // Auto-resize textarea
     thoughtInput.addEventListener('input', function() {
         this.style.height = 'auto';
         this.style.height = (this.scrollHeight) + 'px';
     });
     
-    // Canvas state
     let scale = 1;
     let offsetX = 0;
     let offsetY = 0;
@@ -363,22 +342,17 @@ document.addEventListener('DOMContentLoaded', function() {
     let cards = [];
     let clusters = [];
     
-    // Selection state
     let isSelecting = false;
     let selectionStartX, selectionStartY;
     let selectedCards = [];
     let isCardDragging = false;
 
-    // Zoom limits
     const MIN_ZOOM = 0.5;
     const MAX_ZOOM = 2.7;
     
-    // Initialize canvas position
     updateCanvasTransform();
     
-    // Canvas navigation (pan)
     canvasContainer.addEventListener('mousedown', function(e) {
-        // Ignore if target is a card or button
         if (e.target.closest('.thought-card') || e.target.closest('button')) {
             return;
         }
@@ -389,7 +363,6 @@ document.addEventListener('DOMContentLoaded', function() {
             selectionStartX = e.clientX;
             selectionStartY = e.clientY;
             
-            // Show selection rectangle
             selectionRectangle.style.display = 'block';
             selectionRectangle.style.left = selectionStartX + 'px';
             selectionRectangle.style.top = selectionStartY + 'px';
@@ -409,7 +382,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     document.addEventListener('mousemove', function(e) {
-        // Handle selection rectangle
         if (isSelecting) {
             const width = e.clientX - selectionStartX;
             const height = e.clientY - selectionStartY;
@@ -557,9 +529,9 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="card-content">${text}</div>
             <div class="card-context-container hidden"></div>
             <div class="card-actions">
-                <button class="card-action-btn expand-btn" data-card-id="${id}"><img src='explore-loader-white.svg' width='12px' style='margin-right:6px'/>Expand</button>
-                <button class="card-action-btn relate-btn" data-card-id="${id}"><img src='branch.svg' width='12px' style='margin-right:6px'/>Relate</button>
-                <button class="card-action-btn context-btn" data-card-id="${id}"><img src='note.svg' width='12px' style='margin-right:6px'/>Add Note</button>
+                <button class="card-action-btn expand-btn" data-card-id="${id}"><img src='./assets/explore-loader-white.svg' width='12px' style='margin-right:6px'/>Expand</button>
+                <button class="card-action-btn relate-btn" data-card-id="${id}"><img src='./assets/branch.svg' width='12px' style='margin-right:6px'/>Relate</button>
+                <button class="card-action-btn context-btn" data-card-id="${id}"><img src='./assets/note.svg' width='12px' style='margin-right:6px'/>Add Note</button>
             </div>
         `;
         
@@ -792,7 +764,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     let recognition;
     
-    // Check if SpeechRecognition is available
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         recognition = new (window.webkitSpeechRecognition || window.SpeechRecognition)();
         recognition.continuous = true;
@@ -1136,9 +1107,9 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="card-content">${text}</div>
             <div class="card-context-container hidden"></div>
             <div class="card-actions">
-                <button class="card-action-btn expand-btn" data-card-id="${id}"><img src='explore-loader-white.svg' width='12px' style='margin-right:6px'/>Expand</button>
-                <button class="card-action-btn relate-btn" data-card-id="${id}"><img src='branch.svg' width='12px' style='margin-right:6px'/>Relate</button>
-                <button class="card-action-btn context-btn" data-card-id="${id}"><img src='note.svg' width='12px' style='margin-right:6px'/>Add Note</button>
+                <button class="card-action-btn expand-btn" data-card-id="${id}"><img src='./assets/explore-loader-white.svg' width='12px' style='margin-right:6px'/>Expand</button>
+                <button class="card-action-btn relate-btn" data-card-id="${id}"><img src='./assets/branch.svg' width='12px' style='margin-right:6px'/>Relate</button>
+                <button class="card-action-btn context-btn" data-card-id="${id}"><img src='./assets/note.svg' width='12px' style='margin-right:6px'/>Add Note</button>
             </div>
         `;
         
@@ -1239,23 +1210,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (Array.isArray(relatedThoughts) && relatedThoughts.length > 0) {
                         validResults++;
                         const relatedCards = [];
-                        
-                        // Only use one thought per model to not overwhelm
-                        // Take first thought unless this is the primary model
+
                         const thoughtToUse = (model.id === primaryModel.id) 
                             ? relatedThoughts 
                             : [relatedThoughts[0]];
                         
                         thoughtToUse.forEach(thought => {
-                            // Layout: primary model on right, others arranged vertically on left
                             let x, y;
                             
                             if (model.id === primaryModel.id) {
-                                // Place primary model's thoughts on the right
                                 x = parentX + 320;
                                 y = parentY + (positionIndex * 200);
                             } else {
-                                // Place other models' thoughts on the left
                                 x = parentX - 320;
                                 y = parentY + (positionIndex * 200);
                             }
@@ -1359,42 +1325,34 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function updateConnection(connection, card1, card2) {
-        // Get card positions
         const x1 = card1.position.x + card1.element.offsetWidth / 2;
         const y1 = card1.position.y + card1.element.offsetHeight / 2;
         const x2 = card2.position.x + card2.element.offsetWidth / 2;
         const y2 = card2.position.y + card2.element.offsetHeight / 2;
         
-        // Calculate SVG boundaries to fully contain the curve
         const minX = Math.min(x1, x2) - 100;
         const minY = Math.min(y1, y2) - 100;
         const width = Math.abs(x2 - x1) + 200;
         const height = Math.abs(y2 - y1) + 200;
         
-        // Position the SVG
         connection.style.left = minX + "px";
         connection.style.top = minY + "px";
         connection.setAttribute("width", width);
         connection.setAttribute("height", height);
         
-        // Calculate relative coordinates within the SVG
         const relX1 = x1 - minX;
         const relY1 = y1 - minY;
         const relX2 = x2 - minX;
         const relY2 = y2 - minY;
         
-        // Calculate control point for the curve
-        // This creates a nice arc between the points
         const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-        const curvature = Math.min(0.3, 60 / distance); // Adaptive curvature
+        const curvature = Math.min(0.3, 60 / distance);
         
-        // Calculate perpendicular direction for control point
         const dx = x2 - x1;
         const dy = y2 - y1;
         const controlX = (relX1 + relX2) / 2 - dy * curvature;
         const controlY = (relY1 + relY2) / 2 + dx * curvature;
         
-        // Create the curved path
         const path = connection.querySelector("path");
         path.setAttribute("d", `M ${relX1} ${relY1} Q ${controlX} ${controlY} ${relX2} ${relY2}`);
     }
@@ -1580,13 +1538,12 @@ function updateCardCounter() {
     document.getElementById("card-count").innerHTML = document.getElementsByClassName("thought-card").length;
 }
 
-// Show thinking indicator
+
 function showThinking() {
     document.getElementById('thinking-indicator').style.bottom = '20px';
     document.getElementById('thinking-indicator').style.opacity = '1';
 }
 
-// Hide thinking indicator
 function hideThinking() {
     document.getElementById('thinking-indicator').style.bottom = '-48px';
     document.getElementById('thinking-indicator').style.opacity = '0';
@@ -1610,7 +1567,6 @@ document.getElementById('close-popup').addEventListener('click', function() {
 function initCardAncestryTracker() {
     console.log("Initializing Card Ancestry Tracker...");
     
-    // Add CSS styles for ancestry highlighting and focus mode
     const styleElement = document.createElement('style');
     styleElement.textContent = `
       .ancestry-highlight {
@@ -1656,13 +1612,11 @@ function initCardAncestryTracker() {
     `;
     document.head.appendChild(styleElement);
     
-    // Track highlighted elements and state
     let highlightedCards = [];
     let highlightedConnections = [];
     let isAncestryActive = false;
     let isFocusModeActive = false;
     
-    // Clear all highlights
     function clearHighlights() {
       highlightedCards.forEach(card => {
         card.classList.remove('ancestry-highlight');
@@ -1676,13 +1630,11 @@ function initCardAncestryTracker() {
       highlightedConnections = [];
       isAncestryActive = false;
       
-      // Exit focus mode if active
       if (isFocusModeActive) {
         toggleFocusMode(false);
       }
     }
     
-    // Toggle focus mode (dim/blur non-highlighted cards)
     function toggleFocusMode(activate) {
       const canvas = document.getElementById('infinite-canvas');
       
@@ -1697,7 +1649,6 @@ function initCardAncestryTracker() {
     
     // Highlight a connection between two cards
     function highlightConnection(card1Id, card2Id) {
-      // Check both possible connection IDs
       const connectionId1 = `connection-${card1Id}-${card2Id}`;
       const connectionId2 = `connection-${card2Id}-${card1Id}`;
       
@@ -1713,75 +1664,53 @@ function initCardAncestryTracker() {
       return false;
     }
     
-    // Recursively trace and highlight ancestry
+
     function highlightAncestryChain(cardElement) {
-      // First, highlight the current card
       cardElement.classList.add('ancestry-highlight');
       highlightedCards.push(cardElement);
       
-      // Get parent ID from data attribute
       const parentId = cardElement.getAttribute('data-parent-id');
       
-      // If no parent, this is a root card
       if (!parentId) return;
       
-      // Get the parent element
       const parentElement = document.getElementById(parentId);
       if (!parentElement) return;
       
-      // Highlight the connection between this card and its parent
       highlightConnection(cardElement.id, parentId);
-      
-      // Recursively highlight the parent's ancestry
       highlightAncestryChain(parentElement);
     }
     
-    // Handle card click
     function handleCardClick(cardElement) {
-      // Clear any existing highlights
       clearHighlights();
       
-      // Highlight the ancestry chain
       highlightAncestryChain(cardElement);
       isAncestryActive = true;
-      
-      // If focus mode was active, re-enable it
+
       if (isFocusModeActive) {
         toggleFocusMode(true);
       }
     }
     
-    // Add click handlers
     const canvas = document.getElementById('infinite-canvas');
     
-    // Handle clicking on canvas elements
     canvas.addEventListener('click', function(e) {
-      // If clicked on a card
       const cardElement = e.target.closest('.thought-card');
       
       if (cardElement && !e.target.closest('button') && 
           e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-        // Process card click
         handleCardClick(cardElement);
         e.stopPropagation();
       } 
-      // If clicked on empty canvas
       else if (!cardElement) {
-        // Clear highlights
         clearHighlights();
       }
     });
     
-    // Add keyboard event listener for spacebar
+
     document.addEventListener('keydown', function(e) {
-      // Check if spacebar was pressed
-      if (e.code === 'Space' || e.keyCode === 32) {
-        // Only toggle focus mode if ancestry highlighting is active
+      if (e.code === 'Control' || e.keyCode === 17 || e.ctrlKey) {
         if (isAncestryActive) {
-          // Prevent default space behavior (like page scrolling)
           e.preventDefault();
-          
-          // Toggle focus mode
           toggleFocusMode(!isFocusModeActive);
         }
       }
@@ -1790,7 +1719,7 @@ function initCardAncestryTracker() {
     console.log('Card ancestry tracker initialized successfully');
   }
   
-  // Initialize when DOM is ready
+
   document.addEventListener('DOMContentLoaded', function() {
     setTimeout(initCardAncestryTracker, 2000);
   });
