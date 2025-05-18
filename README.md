@@ -1,6 +1,8 @@
 ## Brunch 🍞🍳🍜
 Brunch is an alternative interface prototype to interact with Large Language Models. You can play with the prototype at [brunch.shuvam.xyz](https://brunch.shuvam.xyz/)
 
+<div align="center" style="margin: 12px auto;"><img src="https://github.com/user-attachments/assets/664b8e9e-4db0-468e-80a2-10734fda91e8" width="160px"/></div>
+
 Ever since the advent of ChatGPT, we have gone through endless internet discussions (some might have even ended in fist-fights) on what is the right UX to use LLMs ⎯ and we do have a general consensus that while chat is a good generalized starting point, it also reinforces the notion of these models being a black box, without giving the user suitable granular controls to tweak the output, at least not all the time.
 
 Back in ~2022, I made a [rough prototype](https://x.com/shuvam360/status/1919380728434896956) powered by `GPT-3` to explore a branched interface to interact with multiple instances of the model, all of whom were provided with differentiated system prompts, viz. one instance was supposed to answer/respond like a devil, while another was an angel, one was an all-knowing information explorer, while another was a poet who spit out haikus and limericks, regardless of your input. Couple of weeks back, re-wrote the older codebase to swap out the now-deprecated `GPT-3` along with adding support for multiple models. 
@@ -13,3 +15,8 @@ I'd admit these new models have not been angel or devil-pilled yet, but if you w
 - Personal favourite feature, once you select a thought card, you can visualize the entire chain of thought traced to it's root.
 - Voice input, in case you're just that bit reluctant to write, powered by the browser's native TTS instead of adding another additional model.
 - Create Clusters to focus on a specific part of the canvas ⎯ there are also instances where `GPT 3.5 Turbo` scans the contents of the canvas and creates it's own smart clusters. However, the smart clustering behaviour is still flaky at the moment.
+
+<br/>
+
+<img width="1512" alt="Screenshot 2025-05-18 at 9 29 32 AM" src="https://github.com/user-attachments/assets/41131585-7f97-47c1-8644-2f42ff5051e9" />
+
