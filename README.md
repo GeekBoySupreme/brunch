@@ -9,12 +9,12 @@ Back in ~2022, I made a [rough prototype](https://x.com/shuvam360/status/1919380
 I'd admit these new models have not been angel or devil-pilled yet, but if you want to add that enhancement, I'll be on the lookout for PRs to merge.
 
 #### In the current state of things, you can ⎯
-- Talk to OpenAI's `GPT 3.5 Turbo`, `Claude 3.5 Sonnet`, and `Gemini 2.0 Flash` (Support for more models and granular model controls shall be added over time) by bringing in your own API keys.
-- Whenever you write a message, an instance of `GPT-3.5` scans the message to figure which model would be the most apt to be the primary responder (essentially a glorified LLM-powered classifier). This optimization was initially made before [OpenRouter](https://openrouter.ai/) came into existence.
+- Talk to OpenAI's `GPT-4o mini`, `Claude Opus 4.5`, and `Gemini 2.5 Flash` (Support for more models and granular model controls shall be added over time) by bringing in your own API keys.
+- Whenever you write a message, an instance of `GPT-4o mini` scans the message to figure which model would be the most apt to be the primary responder (essentially a glorified LLM-powered classifier). This optimization was initially made before [OpenRouter](https://openrouter.ai/) came into existence.
 - You can expand on an idea, get related/adjacent areas of information, and also add more notes/context to the output and basically keep doing this endlessly.
 - Personal favourite feature, once you select a thought card, you can visualize the entire chain of thought traced to it's root.
 - Voice input, in case you're just that bit reluctant to write, powered by the browser's native TTS instead of adding another additional model.
-- Create Clusters to focus on a specific part of the canvas ⎯ there are also instances where `GPT 3.5 Turbo` scans the contents of the canvas and creates it's own smart clusters. However, the smart clustering behaviour is still flaky at the moment.
+- Create Clusters to focus on a specific part of the canvas ⎯ there are also instances where `GPT-4o mini` scans the contents of the canvas and creates it's own smart clusters. However, the smart clustering behaviour is still flaky at the moment.
 
 <br/>
 
