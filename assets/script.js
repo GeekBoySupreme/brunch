@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Authorization': `Bearer ${openAiModel.apiKey}`
                 },
                 body: JSON.stringify({
-                    model: 'gpt-3.5-turbo',
+                    model: 'gpt-4o-mini',
                     messages: [
                         { role: 'system', content: 'You are a classifier that determines which AI model is best suited for a given query. Respond only with the model ID.' },
                         { role: 'user', content: prompt }
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             'Authorization': `Bearer ${model.apiKey}`
                         },
                         body: JSON.stringify({
-                            model: 'gpt-3.5-turbo',
+                            model: 'gpt-4o-mini',
                             messages: [
                                 { role: 'system', content: 'You are a helpful assistant that responds concisely.' },
                                 { role: 'user', content: prompt }
@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         },
                         body: JSON.stringify({
                             apiKey: model.apiKey,
-                            model: 'claude-3-7-sonnet-20250219',
+                            model: 'claude-opus-4-5',
                             max_tokens: 1024,
                             messages: [
                             {role: 'user', content: prompt}
@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         }]
                       };
 
-                    response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${model.apiKey}`, {
+                    response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${model.apiKey}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
